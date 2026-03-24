@@ -1,0 +1,6 @@
+@LuniShop.API_HostAddress = http://localhost:5090
+
+GET {{LuniShop.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
