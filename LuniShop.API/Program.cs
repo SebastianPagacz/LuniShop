@@ -1,3 +1,5 @@
+using LuniShop.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuniShop.API
 {
@@ -8,6 +10,8 @@ namespace LuniShop.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseInMemoryDatabase("TestDb"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

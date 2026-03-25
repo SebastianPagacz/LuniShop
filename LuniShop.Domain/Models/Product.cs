@@ -13,7 +13,7 @@ public class Product
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    private Product() { }
+    private Product() { } // Added for EF Core 
 
     private Product(string name, decimal price)
     {
