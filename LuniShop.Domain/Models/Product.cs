@@ -1,4 +1,5 @@
 ﻿using LuniShop.Domain.Exceptions;
+using System.Xml.Linq;
 
 namespace LuniShop.Domain.Models;
 
@@ -10,7 +11,7 @@ public class Product
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
     public string Image { get; private set; } = string.Empty;
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = false;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
     private Product() { } // Added for EF Core 
@@ -38,6 +39,11 @@ public class Product
             throw new DomainException("Product's name can't be empty.");
 
         Name = name;
+        Description = description;
+    }
+
+    public void SetDescription(string description)
+    {
         Description = description;
     }
 

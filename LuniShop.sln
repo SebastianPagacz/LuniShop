@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuniShop.Domain", "LuniShop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuniShop.Infrastructure", "LuniShop.Infrastructure\LuniShop.Infrastructure.csproj", "{0F7E5E7B-C3CB-4151-B98F-ADF8C5551B29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuniShop.Application", "LuniShop.Application\LuniShop.Application.csproj", "{C2820346-B0E2-48A4-821C-43A61EB76132}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0F7E5E7B-C3CB-4151-B98F-ADF8C5551B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7E5E7B-C3CB-4151-B98F-ADF8C5551B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F7E5E7B-C3CB-4151-B98F-ADF8C5551B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2820346-B0E2-48A4-821C-43A61EB76132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2820346-B0E2-48A4-821C-43A61EB76132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2820346-B0E2-48A4-821C-43A61EB76132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2820346-B0E2-48A4-821C-43A61EB76132}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

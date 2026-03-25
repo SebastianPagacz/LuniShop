@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LuniShop.Application\LuniShop.Application.csproj" />
     <ProjectReference Include="..\LuniShop.Domain\LuniShop.Domain.csproj" />
     <ProjectReference Include="..\LuniShop.Infrastructure\LuniShop.Infrastructure.csproj" />
   </ItemGroup>
