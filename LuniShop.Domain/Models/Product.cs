@@ -1,5 +1,4 @@
 ﻿using LuniShop.Domain.Exceptions;
-using System.Xml.Linq;
 
 namespace LuniShop.Domain.Models;
 

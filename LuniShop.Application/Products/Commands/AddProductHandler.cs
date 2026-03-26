@@ -14,10 +14,10 @@ public class AddProductHandler(IProductRepository repository, IUnitOfWork uow) :
         if(request.Stock.HasValue)
             newProduct.SetStock(request.Stock.Value);
 
-        if (request.Description is not null)
+        if (!string.IsNullOrEmpty(request.Description))
             newProduct.SetDescription(request.Description);
 
-        if (request.Image is not null)
+        if (!string.IsNullOrEmpty(request.Image))
             newProduct.SetImage(request.Image);
 
         if(request.IsActive is not null && request.IsActive == true) // by default new Product.IsActive = flase, if it has value it should be set to active otherwise left as default
