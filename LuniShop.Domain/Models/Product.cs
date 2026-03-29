@@ -11,7 +11,9 @@ public class Product
     public int Stock { get; private set; }
     public string Image { get; private set; } = string.Empty;
     public bool IsActive { get; private set; } = false;
+    public bool IsDeleted { get; private set; } = false;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
     private Product() { } // Added for EF Core 
 
@@ -39,6 +41,11 @@ public class Product
 
         Name = name;
         Description = description;
+    }
+
+    public void SetName(string name)
+    {
+        Name = name;
     }
 
     public void SetDescription(string description)
@@ -94,5 +101,15 @@ public class Product
     public void Deactivate()
     {
         IsActive = false;
+    }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
+
+    public void Update()
+    {
+        UpdatedAt = DateTime.UtcNow;
     }
 }

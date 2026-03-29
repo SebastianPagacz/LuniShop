@@ -38,4 +38,26 @@ public class ProductsController(IMediator mediator) : ControllerBase
 
         return StatusCode(200, result.Value);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync(int id)
+    {
+        var result = await mediator.Send(new DeleteProductCommand(id));
+
+        if (result.IsSuccesfull)
+            return StatusCode(201, result.Message);
+
+        return StatusCode(404, result.Message);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> PatchAsync([FromBody] UpdateProductCommand request)
+    {
+        var result = await mediator.Send(request);
+
+        if(result.IsSuccesfull)
+            return StatusCode(200, result.Value);
+
+        return StatusCode(404, result.Message);
+    }
 }
