@@ -1,15 +1,15 @@
-﻿using LuniShop.Application.Services;
-using LuniShop.Domain.Models;
+﻿using LuniShop.Application.Products.DTO;
+using LuniShop.Application.Services;
 using MediatR;
 
 namespace LuniShop.Application.Products.Queries;
 
-public class GetAllProductsHandler(IProductQueryService queryService) : IRequestHandler<GetAllProductsQuery, Result<List<Product>>>
+public class GetAllProductsHandler(IProductQueryService queryService) : IRequestHandler<GetAllProductsQuery, Result<List<ProductDto>>>
 {
-    public async Task<Result<List<Product>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<ProductDto>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         var products = await queryService.GetAllActiveProductsAsync();
 
-        return new Result<List<Product>>(true, null, products.Where(p => p.IsActive).ToList()); // Future DTO mapping
+        return new Result<List<ProductDto>>(true, null, products); 
     }
 }

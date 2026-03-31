@@ -1,9 +1,9 @@
-﻿using LuniShop.Domain.Models;
+﻿using LuniShop.Application.Products.DTO;
 
 namespace LuniShop.Application.Services;
 
 public interface IProductQueryService
 {
-    Task<List<Product>> GetAllActiveProductsAsync();
-    Task<Product> GetActiveProductByIdAsync(int id);
+    Task<List<ProductDto>> GetAllActiveProductsAsync();
+    Task<ProductDto> GetActiveProductByIdAsync(int id);
 }

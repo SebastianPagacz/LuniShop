@@ -1,3 +1,4 @@
+using LuniShop.API.Middleware;
 using LuniShop.Application;
 using LuniShop.Application.Services;
 using LuniShop.Domain;
@@ -34,6 +35,8 @@ namespace LuniShop.API
 
             var app = builder.Build();
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>(); // Placing registration of Middleware above does matter, now it has "visibility" on other parts of pipeline
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -44,7 +47,6 @@ namespace LuniShop.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
