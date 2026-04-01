@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LuniShop.Infrastructure.Repository;
 
-public class ProductRepository(AppDbContext context) : IRepository
+public class ProductRepository(AppDbContext context) : IRepository<Product>
 {
-    public void Add(Product product)
+    public void Add(Product item)
     {
-        context.Products.Add(product); // Adding only to EF change tracker
+        context.Products.Add(item); // Adding only to EF change tracker
     }
 
     public async Task<List<Product>> GetAsync()

@@ -1,14 +1,13 @@
 ﻿using LuniShop.Application.Products.DTO;
 using LuniShop.Application.Services;
-using LuniShop.Domain.Models;
 using LuniShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace LuniShop.Infrastructure.Services;
 
-public class ProductQueryService(AppDbContext context) : IProductQueryService
+public class ProductQueryService(AppDbContext context) : IQueryService<ProductDto>
 {
-    public async Task<List<ProductDto>> GetAllActiveProductsAsync()
+    public async Task<List<ProductDto>> GetAllActiveItemsAsync()
     {
         return await context.Products
             .AsNoTracking()
@@ -17,7 +16,7 @@ public class ProductQueryService(AppDbContext context) : IProductQueryService
             .ToListAsync(); 
     }
 
-    public async Task<ProductDto> GetActiveProductByIdAsync(int id)
+    public async Task<ProductDto> GetActiveItemByIdAsync(int id)
     {
         return await context.Products
             .AsNoTracking().

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Commands;
 
-public class DeleteProductHandler(IUnitOfWork uow, IRepository repository) : IRequestHandler<DeleteProductCommand, Result<Product>>
+public class DeleteProductHandler(IUnitOfWork uow, IRepository<Product> repository) : IRequestHandler<DeleteProductCommand, Result<Product>>
 {
     public async Task<Result<Product>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {

@@ -4,11 +4,11 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Queries;
 
-public class GetAllProductsHandler(IProductQueryService queryService) : IRequestHandler<GetAllProductsQuery, Result<List<ProductDto>>>
+public class GetAllProductsHandler(IQueryService<ProductDto> queryService) : IRequestHandler<GetAllProductsQuery, Result<List<ProductDto>>>
 {
     public async Task<Result<List<ProductDto>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await queryService.GetAllActiveProductsAsync();
+        var products = await queryService.GetAllActiveItemsAsync();
 
         return new Result<List<ProductDto>>(true, null, products); 
     }
