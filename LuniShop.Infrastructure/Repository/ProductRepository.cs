@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LuniShop.Infrastructure.Repository;
 
-public class ProductRepository(AppDbContext context) : IProductRepository
+public class ProductRepository(AppDbContext context) : IRepository
 {
     public void Add(Product product)
     {

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Commands;
 
-public class UpdateProductHandler(IUnitOfWork uow, IProductRepository repository) : IRequestHandler<UpdateProductCommand, Result<Product>>
+public class UpdateProductHandler(IUnitOfWork uow, IRepository repository) : IRequestHandler<UpdateProductCommand, Result<Product>>
 {
     public async Task<Result<Product>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {

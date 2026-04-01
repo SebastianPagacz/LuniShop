@@ -2,7 +2,7 @@
 
 namespace LuniShop.Domain.Repository;
 
-public interface IProductRepository
+public interface IRepository
 {
     void Add(Product product);
     Task<Product> GetByIdAsync(int id);

@@ -14,6 +14,8 @@ public class Product
     public bool IsDeleted { get; private set; } = false;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+    public IReadOnlyCollection<Review> Reviews { get { return _reviews; } }
+    private readonly List<Review> _reviews = new List<Review>();
 
     private Product() { } // Added for EF Core 
 
@@ -41,24 +43,31 @@ public class Product
 
         Name = name;
         Description = description;
+        Update();
     }
 
     public void SetName(string name)
     {
+        if (string.IsNullOrEmpty(name))
+            throw new DomainException("Product's name can't be empty.");
+
         Name = name;
+        Update();
     }
 
     public void SetDescription(string description)
     {
         Description = description;
+        Update();
     }
 
     public void SetImage(string newImage)
     {
         if (string.IsNullOrEmpty(newImage))
             throw new DomainException("Image can't be empty."); // TODO: Think about the logic here
-        
+
         Image = newImage;
+        Update();
     }
 
     public void SetPrice(decimal newPrice)
@@ -67,6 +76,7 @@ public class Product
             throw new DomainException("Price can't be lower or equal to 0.");
 
         Price = newPrice;
+        Update();
     }
 
     public void SetStock(int newStock)
@@ -75,6 +85,7 @@ public class Product
             throw new DomainException("Stock can't be negative.");
 
         Stock = newStock;
+        Update();
     }
 
     public void AddStock(int quantity)
@@ -88,7 +99,7 @@ public class Product
     public void SubtractStock(int quantity)
     {
         if (quantity <= 0 || quantity > Stock)
-            throw new DomainException("Price can't be negative.");
+            throw new DomainException("Stock can't be negative.");
 
         Stock -= quantity;
     }
@@ -96,20 +107,35 @@ public class Product
     public void Activate()
     {
         IsActive = true;
+        Update();
     }
 
     public void Deactivate()
     {
         IsActive = false;
+        Update();
     }
 
     public void Delete()
     {
         IsDeleted = true;
+        Update();
     }
 
     public void Update()
     {
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public Review AddReview(string title, int rating, string? content)
+    {
+        var newReview = Review.CreateReview(Id, title, rating);
+
+        if (!string.IsNullOrEmpty(content))
+            newReview.SetContent(content);
+
+        _reviews.Add(newReview);
+
+        return newReview;
     }
 }
