@@ -7,7 +7,7 @@ namespace LuniShop.Infrastructure.Services;
 
 public class ReviewQueryService(AppDbContext context) : IReviewQueryService
 {
-    public async Task<ReviewDto> GetActiveItemByIdAsync(int id)
+    public async Task<ReviewDto> GetActiveItemByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await context.Reviews.AsNoTracking()
             .Where(r => !r.IsDeleted)
@@ -15,7 +15,7 @@ public class ReviewQueryService(AppDbContext context) : IReviewQueryService
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<List<ReviewDto>?> GetAllReviewsForProductAsync(int productId)
+    public async Task<List<ReviewDto>?> GetAllReviewsForProductAsync(int productId, CancellationToken cancellationToken)
     {
         var existingProduct = await context.Products
             .AsNoTracking()
@@ -29,6 +29,6 @@ public class ReviewQueryService(AppDbContext context) : IReviewQueryService
             .AsNoTracking()
             .Where(r => r.ProductId == existingProduct.Id && !r.IsDeleted)
             .Select(r => new ReviewDto(r.Id, r.Title, r.Content, r.Rating, r.ProductId))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

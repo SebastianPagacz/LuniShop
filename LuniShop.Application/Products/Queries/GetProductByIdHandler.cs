@@ -8,7 +8,7 @@ public class GetProductByIdHandler(IProductQueryService queryService) : IRequest
 {
     public async Task<Result<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        var product = await queryService.GetActiveItemByIdAsync(request.Id);
+        var product = await queryService.GetActiveItemByIdAsync(request.Id, cancellationToken);
 
         if (product is null) // Validation if product is deleted and/or active is at the QueryService level
             return new Result<ProductDto>(false, $"Product with Id: {request.Id} was not found.", null);

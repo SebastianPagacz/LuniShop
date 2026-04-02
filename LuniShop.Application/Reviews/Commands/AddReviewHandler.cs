@@ -9,7 +9,7 @@ public class AddReviewHandler(IUnitOfWork uow, IRepository<Product> productRepo)
 {
     public async Task<Result<Review>> Handle(AddReviewCommand request, CancellationToken cancellationToken)
     {
-        var existingProduct = await productRepo.GetByIdAsync(request.ProductId);
+        var existingProduct = await productRepo.GetByIdAsync(request.ProductId, cancellationToken);
 
         if (existingProduct is null || existingProduct.IsDeleted || !existingProduct.IsActive)
             return new Result<Review>(false, $"Product with Id: {request.ProductId} was not found", null);

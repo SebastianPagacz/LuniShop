@@ -12,13 +12,13 @@ public class ReviewRepository(AppDbContext context) : IRepository<Review>
         context.Reviews.Add(item);
     }
 
-    public async Task<List<Review>> GetAsync()
+    public async Task<List<Review>> GetAsync(CancellationToken cancellationToken)
     {
-        return await context.Reviews.ToListAsync();
+        return await context.Reviews.ToListAsync(cancellationToken);
     }
 
-    public async Task<Review> GetByIdAsync(int id)
+    public async Task<Review> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await context.Reviews.FirstOrDefaultAsync(r => r.Id == id);
+        return await context.Reviews.FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 }

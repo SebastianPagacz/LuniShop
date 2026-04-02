@@ -9,7 +9,7 @@ public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> reposito
 {
     public async Task<Result<Product>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var existingProduct = await repository.GetByIdAsync(request.Id);
+        var existingProduct = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingProduct.IsDeleted || existingProduct is null)
             return new Result<Product>(false, $"Product with Id: {request.Id} was not found", null);
@@ -17,7 +17,7 @@ public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> reposito
         if(!string.IsNullOrEmpty(request.Name))
             existingProduct.SetName(request.Name);
 
-        if(!string.IsNullOrEmpty(request.Description)) // ToDo: How to delete description?
+        if(request.Description != null) // Can be empty but can't be null
             existingProduct.SetDescription(request.Description);
 
         if (request.Price != null)
@@ -26,7 +26,7 @@ public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> reposito
         if(request.Stock != null)
             existingProduct.SetStock((int)request.Stock);
 
-        if (!string.IsNullOrEmpty(request.Image))
+        if (request.Image != null) // Can be empty but can't be null
             existingProduct.SetDescription(request.Image);
 
         if (request.IsActive != null && existingProduct.IsActive)

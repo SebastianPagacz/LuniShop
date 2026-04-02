@@ -12,13 +12,13 @@ public class ProductRepository(AppDbContext context) : IRepository<Product>
         context.Products.Add(item); // Adding only to EF change tracker
     }
 
-    public async Task<List<Product>> GetAsync()
+    public async Task<List<Product>> GetAsync(CancellationToken cancellationToken)
     {
-        return await context.Products.ToListAsync();
+        return await context.Products.ToListAsync(cancellationToken);
     }
 
-    public async Task<Product> GetByIdAsync(int id)
+    public async Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        return await context.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 }

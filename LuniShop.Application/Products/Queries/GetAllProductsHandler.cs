@@ -8,7 +8,7 @@ public class GetAllProductsHandler(IProductQueryService queryService) : IRequest
 {
     public async Task<Result<List<ProductDto>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await queryService.GetAllActiveItemsAsync();
+        var products = await queryService.GetAllActiveItemsAsync(cancellationToken);
 
         return new Result<List<ProductDto>>(true, null, products); 
     }

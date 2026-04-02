@@ -9,7 +9,7 @@ public class DeleteProductHandler(IUnitOfWork uow, IRepository<Product> reposito
 {
     public async Task<Result<Product>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var existingProduct = await repository.GetByIdAsync(request.Id);
+        var existingProduct = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingProduct.IsDeleted || existingProduct is null)
             return new Result<Product>(false, $"Product with Id: {request.Id} was not found.", null);
