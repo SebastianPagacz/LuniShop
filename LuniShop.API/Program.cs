@@ -1,6 +1,7 @@
 using LuniShop.API.Middleware;
 using LuniShop.Application;
 using LuniShop.Application.Products.DTO;
+using LuniShop.Application.Reviews.DTO;
 using LuniShop.Application.Services;
 using LuniShop.Domain;
 using LuniShop.Domain.Models;
@@ -27,7 +28,8 @@ namespace LuniShop.API
             builder.Services.AddScoped<IRepository<Review>, ReviewRepository>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IQueryService<ProductDto>, ProductQueryService>();
+            builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+            builder.Services.AddScoped<IReviewQueryService, ReviewQueryService>();
 
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly));
 

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Queries;
 
-public class GetProductByIdHandler(IQueryService<ProductDto> queryService) : IRequestHandler<GetProductByIdQuery, Result<ProductDto>>
+public class GetProductByIdHandler(IProductQueryService queryService) : IRequestHandler<GetProductByIdQuery, Result<ProductDto>>
 {
     public async Task<Result<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {

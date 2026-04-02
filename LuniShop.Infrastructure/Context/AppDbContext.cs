@@ -22,7 +22,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Product>() // I guess that ef core would map it without explicit config, feels like a good practise though
             .HasMany(e => e.Reviews)
-            .WithOne(e => e.Product)
+            .WithOne()
             .HasForeignKey(e => e.ProductId)
             .IsRequired();
         #endregion

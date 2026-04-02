@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LuniShop.Infrastructure.Services;
 
-public class ProductQueryService(AppDbContext context) : IQueryService<ProductDto>
+public class ProductQueryService(AppDbContext context) : IProductQueryService
 {
     public async Task<List<ProductDto>> GetAllActiveItemsAsync()
     {
