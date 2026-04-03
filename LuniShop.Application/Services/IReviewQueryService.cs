@@ -4,6 +4,6 @@ namespace LuniShop.Application.Services;
 
 public interface IReviewQueryService
 {
-    Task<ReviewDto> GetActiveItemByIdAsync(int id, CancellationToken cancellationToken);
+    Task<ReviewDto?> GetActiveReviewByIdAsync(int productId, int reviewId, CancellationToken cancellationToken);
     Task<List<ReviewDto>?> GetAllReviewsForProductAsync(int productId, CancellationToken cancellationToken);
 }

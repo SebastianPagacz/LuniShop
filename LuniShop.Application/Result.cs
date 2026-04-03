@@ -1,3 +1,3 @@
 ﻿namespace LuniShop.Application;
 
-public record Result<T>(bool IsSuccesfull, string? Message, T? Value) { }
+public record Result<T>(bool IsSuccesfull, string? Message = default, T? Value = default) { }

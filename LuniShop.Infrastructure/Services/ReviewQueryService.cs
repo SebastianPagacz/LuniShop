@@ -7,12 +7,15 @@ namespace LuniShop.Infrastructure.Services;
 
 public class ReviewQueryService(AppDbContext context) : IReviewQueryService
 {
-    public async Task<ReviewDto> GetActiveItemByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<ReviewDto?> GetActiveReviewByIdAsync(int productId, int reviewId, CancellationToken cancellationToken)
     {
-        return await context.Reviews.AsNoTracking()
+        return await context.Products
+            .AsNoTracking()
+            .Where(p => p.IsActive && !p.IsDeleted && p.Id == productId)
+            .SelectMany(p => p.Reviews)
             .Where(r => !r.IsDeleted)
             .Select(r => new ReviewDto(r.Id, r.Title, r.Content, r.Rating, r.ProductId))
-            .FirstOrDefaultAsync(r => r.Id == id);
+            .FirstOrDefaultAsync(r => r.Id == reviewId, cancellationToken);
     }
 
     public async Task<List<ReviewDto>?> GetAllReviewsForProductAsync(int productId, CancellationToken cancellationToken)
@@ -20,7 +23,7 @@ public class ReviewQueryService(AppDbContext context) : IReviewQueryService
         var existingProduct = await context.Products
             .AsNoTracking()
             .Where(p => !p.IsDeleted && p.IsActive)
-            .FirstOrDefaultAsync(p => p.Id == productId); // Think about handlign not exisitng products, I might do it in app layer. If product does not exists it will throw an exception
+            .FirstOrDefaultAsync(p => p.Id == productId);
 
         if (existingProduct is null)
             return null;

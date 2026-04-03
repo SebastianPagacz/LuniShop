@@ -5,9 +5,9 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Commands;
 
-public class AddProductHandler(IRepository<Product> repository, IUnitOfWork uow) : IRequestHandler<AddProductCommand, Result<Product>>
+public class AddProductHandler(IRepository<Product> repository, IUnitOfWork uow) : IRequestHandler<AddProductCommand, Result<string>>
 {
-    public async Task<Result<Product>> Handle(AddProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
         var newProduct = Product.Create(request.Name, request.Price);
 
@@ -26,6 +26,6 @@ public class AddProductHandler(IRepository<Product> repository, IUnitOfWork uow)
         repository.Add(newProduct);
         await uow.SaveAsync();
 
-        return new Result<Product>(true, $"Product with Id: {newProduct.Id} was created.", newProduct);
+        return new Result<string>(true, $"Product with Id: {newProduct.Id} was created.", $"api/Products/{newProduct.Id}");
     }
 }

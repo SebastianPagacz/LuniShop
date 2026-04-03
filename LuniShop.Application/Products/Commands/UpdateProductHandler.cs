@@ -5,14 +5,14 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Commands;
 
-public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> repository) : IRequestHandler<UpdateProductCommand, Result<Product>>
+public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> repository) : IRequestHandler<UpdateProductCommand, Result<string>>
 {
-    public async Task<Result<Product>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         var existingProduct = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingProduct.IsDeleted || existingProduct is null)
-            return new Result<Product>(false, $"Product with Id: {request.Id} was not found", null);
+            return new Result<string>(false, $"Product with Id: {request.Id} was not found", null);
 
         if(!string.IsNullOrEmpty(request.Name))
             existingProduct.SetName(request.Name);
@@ -39,6 +39,6 @@ public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> reposito
 
         await uow.SaveAsync();
 
-        return new Result<Product>(true, null, existingProduct);
+        return new Result<string>(true, $"Product with Id: {existingProduct.Id} has been updated.", null);
     }
 }

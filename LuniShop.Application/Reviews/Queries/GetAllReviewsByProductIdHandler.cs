@@ -11,8 +11,8 @@ public class GetAllReviewsByProductIdHandler(IReviewQueryService reviewQuery) : 
         var productsList = await reviewQuery.GetAllReviewsForProductAsync(request.productId, cancellationToken);
 
         if (productsList is null)
-            return new Result<List<ReviewDto>>(false, $"Product with Id: {request.productId} doesn't exists.", null);
+            return new Result<List<ReviewDto>>(false, $"Product with Id: {request.productId} was not found.", null);
 
-        return new Result<List<ReviewDto>>(true, null, productsList);
+        return new Result<List<ReviewDto>>(true, Value : productsList);
     }
 }

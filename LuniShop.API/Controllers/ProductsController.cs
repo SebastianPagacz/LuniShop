@@ -3,6 +3,7 @@ using LuniShop.Application.Products.Queries;
 using LuniShop.Application.Reviews.Commands;
 using LuniShop.Application.Reviews.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LuniShop.API.Controllers;
@@ -17,7 +18,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(request, cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(201, $"Product with Id: {result.Value.Id} was successfuly created."); // ToDo: might return just Id instead of while object
+            return Created(result.Value, result.Message); // ToDo: might return just Id instead of while object
 
         return StatusCode(400, result.Message);
     }
@@ -58,7 +59,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(request, cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(200, result.Value);
+            return NoContent();
 
         return StatusCode(404, result.Message);
     }
@@ -67,10 +68,10 @@ public class ProductsController(IMediator mediator) : ControllerBase
     [HttpPost("Reviews")]
     public async Task<IActionResult> PostAsync([FromBody] AddReviewCommand request, CancellationToken cancellationToken) // ToDo: change to fit API convention
     {
-        var result = await mediator.Send(request);
+        var result = await mediator.Send(request, cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(201, $"Review with Id: {result.Value.Id} was successfuly created."); // ToDo: might return just Id instead of while object
+            return Created(result.Value, result.Message);
 
         return StatusCode(400, result.Message);
     }
@@ -84,6 +85,17 @@ public class ProductsController(IMediator mediator) : ControllerBase
             return StatusCode(200, result.Value);
         
         return StatusCode(404, result.Message);
+    }
+
+    [HttpGet("{productId}/Reviews/{reviewId}")]
+    public async Task<IActionResult> GetReviewByIdAsync(int productId, int reviewId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetReviewByIdQuery(productId, reviewId), cancellationToken);
+
+        if (result.IsSuccesfull)
+            return Ok(result.Value);
+
+        return NotFound(result.Message);
     }
     #endregion
 }
