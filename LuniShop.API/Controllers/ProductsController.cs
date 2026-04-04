@@ -1,6 +1,7 @@
 ﻿using LuniShop.Application.Products.Commands;
 using LuniShop.Application.Products.Queries;
 using LuniShop.Application.Reviews.Commands;
+using LuniShop.Application.Reviews.DTO;
 using LuniShop.Application.Reviews.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -80,10 +81,10 @@ public class ProductsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetReviewsByProductIdAsync(int productId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetAllReviewsByProductIdQuery(productId), cancellationToken);
-        
-        if(result.IsSuccesfull)
+
+        if (result.IsSuccesfull)
             return StatusCode(200, result.Value);
-        
+
         return StatusCode(404, result.Message);
     }
 
@@ -94,6 +95,28 @@ public class ProductsController(IMediator mediator) : ControllerBase
 
         if (result.IsSuccesfull)
             return Ok(result.Value);
+
+        return NotFound(result.Message);
+    }
+
+    [HttpPatch("{productId}/Reviews/{reviewId}")]
+    public async Task<IActionResult> PatchAsync(int productId, int reviewId, [FromBody] UpdateReviewRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdateReviewCommand(reviewId, request.Title, request.Content, request.Rating, productId), cancellationToken);
+
+        if (result.IsSuccesfull)
+            return Ok(result.Message);
+
+        return NotFound(result.Message);
+    }
+
+    [HttpDelete("{productId}/Reviews/{reviewId}")]
+    public async Task<IActionResult> DeleteAsync(int productId, int reviewId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new DeleteReviewCommand(productId, reviewId), cancellationToken);
+
+        if (result.IsSuccesfull)
+            return NoContent();
 
         return NotFound(result.Message);
     }

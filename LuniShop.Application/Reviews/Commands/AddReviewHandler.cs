@@ -16,7 +16,7 @@ public class AddReviewHandler(IUnitOfWork uow, IRepository<Product> productRepo)
  
         var newReview = existingProduct.AddReview(request.Title, request.Rating, request.Content); // Adds new entry to private list, EF Core detects new untracked entry and inserts it into db
 
-        await uow.SaveAsync();
+        await uow.SaveAsync(cancellationToken);
 
         return new Result<string>(true, $"Review with Id: {newReview.Id} has been created", $"api/Products/{newReview.ProductId}/Reviews/{newReview.Id}");
     }

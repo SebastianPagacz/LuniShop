@@ -26,6 +26,7 @@ namespace LuniShop.API
 
             builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
             builder.Services.AddScoped<IRepository<Review>, ReviewRepository>();
+            builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductQueryService, ProductQueryService>();

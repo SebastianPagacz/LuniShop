@@ -5,8 +5,8 @@ namespace LuniShop.Infrastructure;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    public async Task SaveAsync()
+    public async Task SaveAsync(CancellationToken cancellationToken)
     {
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

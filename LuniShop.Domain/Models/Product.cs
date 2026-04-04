@@ -14,8 +14,10 @@ public class Product
     public bool IsDeleted { get; private set; } = false;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
-    public IReadOnlyCollection<Review> Reviews { get { return _reviews; } }
-    private readonly List<Review> _reviews = new List<Review>();
+    public IReadOnlyCollection<Review> Reviews { get { return _reviews; } } // Readonly public prop
+    private readonly List<Review> _reviews = new List<Review>(); // Private list that can be modified 
+    public IReadOnlyCollection<ProductCategory> ProductCategories { get { return _productCategories; } }
+    private readonly List<ProductCategory> _productCategories = new List<ProductCategory>();
 
     private Product() { } // Added for EF Core 
 
@@ -122,7 +124,7 @@ public class Product
         Update();
     }
 
-    public void Update()
+    private void Update()
     {
         UpdatedAt = DateTime.UtcNow;
     }
@@ -137,5 +139,15 @@ public class Product
         _reviews.Add(newReview);
 
         return newReview;
+    }
+
+    public void AssignCategory(int categoryId)
+    {
+        if (_productCategories.Any(pc => pc.CategoryId == categoryId))
+            throw new DomainException($"Category with Id {categoryId} is already assigned to the product.");
+
+        var newProductCategory = ProductCategory.Create(this, categoryId);
+
+        _productCategories.Add(newProductCategory);
     }
 }

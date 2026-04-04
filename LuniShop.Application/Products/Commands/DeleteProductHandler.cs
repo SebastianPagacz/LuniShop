@@ -16,7 +16,7 @@ public class DeleteProductHandler(IUnitOfWork uow, IRepository<Product> reposito
 
         existingProduct.Delete();
 
-        await uow.SaveAsync();
+        await uow.SaveAsync(cancellationToken);
 
         return new Result<Product>(true, $"Product with Id: {request.Id} has been deleted.", null);
     }

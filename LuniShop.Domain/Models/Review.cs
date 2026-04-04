@@ -59,7 +59,7 @@ public class Review
         IsDeleted = true;
         Update();
 	}
-	public void Update()
+	private void Update()
 	{
         UpdatedAt = DateTime.UtcNow;
     }

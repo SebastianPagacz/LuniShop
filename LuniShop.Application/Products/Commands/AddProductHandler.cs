@@ -24,7 +24,7 @@ public class AddProductHandler(IRepository<Product> repository, IUnitOfWork uow)
             newProduct.Activate();
 
         repository.Add(newProduct);
-        await uow.SaveAsync();
+        await uow.SaveAsync(cancellationToken);
 
         return new Result<string>(true, $"Product with Id: {newProduct.Id} was created.", $"api/Products/{newProduct.Id}");
     }

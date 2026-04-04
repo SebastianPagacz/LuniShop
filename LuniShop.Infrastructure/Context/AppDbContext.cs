@@ -43,8 +43,24 @@ public class AppDbContext : DbContext
             .Property(r => r.Content)
             .HasMaxLength(1000);
         #endregion
+
+        #region Category
+        modelBuilder.Entity<Category>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<Category>()
+            .Property(c => c.Name)
+            .IsRequired();
+        #endregion
+
+        #region ProductCategory
+        modelBuilder.Entity<ProductCategory>()
+            .HasKey(pc => new { pc.ProductId, pc.CategoryId });
+        #endregion
     }
     public AppDbContext(DbContextOptions options) : base(options) { }
     public DbSet<Product> Products { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
 }
