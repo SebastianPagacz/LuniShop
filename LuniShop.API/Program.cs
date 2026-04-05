@@ -31,6 +31,7 @@ namespace LuniShop.API
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
             builder.Services.AddScoped<IReviewQueryService, ReviewQueryService>();
+            builder.Services.AddScoped<ICategoryQueryService, CategoryQueryService>();
 
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly));
 

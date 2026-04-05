@@ -35,8 +35,6 @@ public class UpdateProductHandler(IUnitOfWork uow, IRepository<Product> reposito
         if (request.IsActive != null && !existingProduct.IsActive)
             existingProduct.Activate();
 
-        existingProduct.Update();
-
         await uow.SaveAsync(cancellationToken);
 
         return new Result<string>(true, $"Product with Id: {existingProduct.Id} has been updated.", null);
