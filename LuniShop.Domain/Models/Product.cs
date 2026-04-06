@@ -141,7 +141,7 @@ public class Product
         return newReview;
     }
 
-    public void AssignCategory(int categoryId)
+    public void AssignCategory(int categoryId) // ToDo: Reconsider what should be returned (bool?)
     {
         if (_productCategories.Any(pc => pc.CategoryId == categoryId))
             throw new DomainException($"Category with Id {categoryId} is already assigned to the product.");

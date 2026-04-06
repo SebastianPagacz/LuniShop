@@ -13,17 +13,17 @@ public class ReviewQueryService(AppDbContext context) : IReviewQueryService
             .AsNoTracking()
             .Where(p => p.IsActive && !p.IsDeleted && p.Id == productId)
             .SelectMany(p => p.Reviews)
-            .Where(r => !r.IsDeleted)
+            .Where(r => !r.IsDeleted && r.Id == reviewId)
             .Select(r => new ReviewDto(r.Id, r.Title, r.Content, r.Rating, r.ProductId))
-            .FirstOrDefaultAsync(r => r.Id == reviewId, cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<ReviewDto>?> GetAllReviewsForProductAsync(int productId, CancellationToken cancellationToken)
     {
         var existingProduct = await context.Products
             .AsNoTracking()
-            .Where(p => !p.IsDeleted && p.IsActive)
-            .FirstOrDefaultAsync(p => p.Id == productId);
+            .Where(p => !p.IsDeleted && p.IsActive && p.Id == productId)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (existingProduct is null)
             return null;

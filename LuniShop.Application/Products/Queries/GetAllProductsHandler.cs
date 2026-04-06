@@ -10,6 +10,6 @@ public class GetAllProductsHandler(IProductQueryService queryService) : IRequest
     {
         var products = await queryService.GetAllActiveItemsAsync(cancellationToken);
 
-        return new Result<List<ProductDto>>(true, null, products); 
+        return new Result<List<ProductDto>>(true, null, products);
     }
 }

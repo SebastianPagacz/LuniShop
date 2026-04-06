@@ -12,8 +12,8 @@ public class CategoryQueryService(AppDbContext context) : ICategoryQueryService
     {
         return await context.Categories
             .AsNoTracking()
-            .Where(c => !c.IsDeleted && c.IsActive)
+            .Where(c => !c.IsDeleted && c.IsActive && c.Id == id)
             .Select(c => new CategoryDto(c.Id, c.Name))
-            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using LuniShop.Application.Products.Commands;
+using LuniShop.Application.Products.DTO;
 using LuniShop.Application.Products.Queries;
 using LuniShop.Application.Reviews.Commands;
 using LuniShop.Application.Reviews.DTO;
 using LuniShop.Application.Reviews.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LuniShop.API.Controllers;
@@ -21,7 +21,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
         if (result.IsSuccesfull)
             return Created(result.Value, result.Message); // ToDo: might return just Id instead of while object
 
-        return StatusCode(400, result.Message);
+        return BadRequest(result.Message);
     }
 
     [HttpGet("{id}")]
@@ -30,9 +30,9 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new GetProductByIdQuery(id), cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(200, result.Value);
+            return Ok(result.Value);
 
-        return StatusCode(404, result.Message);
+        return NotFound(result.Message);
     }
 
     [HttpGet]
@@ -40,7 +40,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(new GetAllProductsQuery(), cancellationToken);
 
-        return StatusCode(200, result.Value);
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id}")]
@@ -49,9 +49,9 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new DeleteProductCommand(id), cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(200, result.Message);
+            return Ok(result.Message);
 
-        return StatusCode(404, result.Message);
+        return NotFound(result.Message);
     }
 
     [HttpPatch]
@@ -62,11 +62,11 @@ public class ProductsController(IMediator mediator) : ControllerBase
         if (result.IsSuccesfull)
             return NoContent();
 
-        return StatusCode(404, result.Message);
+        return NotFound(result.Message);
     }
 
     #region Review
-    [HttpPost("Reviews")]
+    [HttpPost("reviews")]
     public async Task<IActionResult> PostAsync([FromBody] AddReviewCommand request, CancellationToken cancellationToken) // ToDo: change to fit API convention
     {
         var result = await mediator.Send(request, cancellationToken);
@@ -74,21 +74,21 @@ public class ProductsController(IMediator mediator) : ControllerBase
         if (result.IsSuccesfull)
             return Created(result.Value, result.Message);
 
-        return StatusCode(400, result.Message);
+        return BadRequest(result.Message);
     }
 
-    [HttpGet("{productId}/Reviews")]
+    [HttpGet("{productId}/reviews")]
     public async Task<IActionResult> GetReviewsByProductIdAsync(int productId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetAllReviewsByProductIdQuery(productId), cancellationToken);
 
         if (result.IsSuccesfull)
-            return StatusCode(200, result.Value);
+            return Ok(result.Value);
 
-        return StatusCode(404, result.Message);
+        return NotFound(result.Message);
     }
 
-    [HttpGet("{productId}/Reviews/{reviewId}")]
+    [HttpGet("{productId}/reviews/{reviewId}")]
     public async Task<IActionResult> GetReviewByIdAsync(int productId, int reviewId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetReviewByIdQuery(productId, reviewId), cancellationToken);
@@ -99,7 +99,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return NotFound(result.Message);
     }
 
-    [HttpPatch("{productId}/Reviews/{reviewId}")]
+    [HttpPatch("{productId}/reviews/{reviewId}")]
     public async Task<IActionResult> PatchAsync(int productId, int reviewId, [FromBody] UpdateReviewRequest request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new UpdateReviewCommand(reviewId, request.Title, request.Content, request.Rating, productId), cancellationToken);
@@ -110,13 +110,25 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return NotFound(result.Message);
     }
 
-    [HttpDelete("{productId}/Reviews/{reviewId}")]
+    [HttpDelete("{productId}/reviews/{reviewId}")]
     public async Task<IActionResult> DeleteAsync(int productId, int reviewId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new DeleteReviewCommand(productId, reviewId), cancellationToken);
 
         if (result.IsSuccesfull)
             return NoContent();
+
+        return NotFound(result.Message);
+    }
+    #endregion
+    #region Category
+    [HttpPost("{productId}/categories")]
+    public async Task<IActionResult> AssignCategoryAsync(int productId, [FromBody] AssignCategoryRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new AssignCategoryCommand(productId, request.CategoryId), cancellationToken);
+
+        if (result.IsSuccesfull)
+            return Created(result.Value, result.Message);
 
         return NotFound(result.Message);
     }
