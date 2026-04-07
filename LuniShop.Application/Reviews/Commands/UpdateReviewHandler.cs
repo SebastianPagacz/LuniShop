@@ -11,7 +11,7 @@ public class UpdateReviewHandler(IUnitOfWork uow, IRepository<Review> repository
 {
     public async Task<Result<ReviewDto>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
-        if (await queryService.GetActiveItemByIdAsync(request.ProductId, cancellationToken) is null)
+        if (await queryService.GetActiveProductByIdAsync(request.ProductId, cancellationToken) is null)
             return new Result<ReviewDto>(false, Message: $"Review with Id: {request.Id} was not found."); // I do not give information that the product doesn't exist rather that review doesn't exists for particular product
         
         var existinReview = await repository.GetByIdAsync(request.Id, cancellationToken);

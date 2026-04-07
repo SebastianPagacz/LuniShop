@@ -10,7 +10,7 @@ public class DeleteReviewHandler(IRepository<Review> repository, IUnitOfWork uow
 {
     public async Task<Result<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {
-        if (await queryService.GetActiveItemByIdAsync(request.ProductId, cancellationToken) is null)
+        if (await queryService.GetActiveProductByIdAsync(request.ProductId, cancellationToken) is null)
             return new Result<string>(false, Message: $"Review with Id: {request.ReviewId} was not found.");
 
         var existingReview = await repository.GetByIdAsync(request.ReviewId, cancellationToken);

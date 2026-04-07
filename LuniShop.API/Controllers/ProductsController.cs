@@ -36,11 +36,21 @@ public class ProductsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllAsync([FromQuery] int? categoryId, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetAllProductsQuery(), cancellationToken);
+        if (categoryId.HasValue)
+        {
+            var productsForCategory = await mediator.Send(new GetAllProductsByCategoryIdQuery((int)categoryId), cancellationToken);
+            
+            if(productsForCategory.IsSuccesfull)
+                return Ok(productsForCategory.Value);
 
-        return Ok(result.Value);
+            return NotFound(productsForCategory.Message);
+        }
+
+        var products = await mediator.Send(new GetAllProductsQuery(), cancellationToken);
+
+        return Ok(products.Value);
     }
 
     [HttpDelete("{id}")]
