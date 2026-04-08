@@ -3,4 +3,4 @@ using MediatR;
 
 namespace LuniShop.Application.Products.Queries;
 
-public record GetAllProductsQuery : IRequest<Result<List<ProductDto>>> { }
+public record GetAllProductsQuery(int? CategoryId, string? SearchTerm) : IRequest<Result<List<ProductDto>>> { }

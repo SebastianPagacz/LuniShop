@@ -8,20 +8,6 @@ namespace LuniShop.Infrastructure.Services;
 
 public class ProductQueryService(AppDbContext context) : IProductQueryService
 {
-    public async Task<List<ProductDto>> GetAllActiveProductsAsync(CancellationToken cancellationToken)
-    {
-        return await context.Products
-            .AsNoTracking()
-            .Where(p => p.IsActive && !p.IsDeleted)
-            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.Image, 
-                p.ProductCategories
-                .Where(pc => pc.Category.IsActive && !pc.Category.IsDeleted)
-                .Select(pc => new CategoryDto(pc.CategoryId, pc.Category.Name))
-                .AsEnumerable()
-            ))
-            .ToListAsync(cancellationToken); 
-    }
-
     public async Task<ProductDto> GetActiveProductByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await context.Products
@@ -36,16 +22,23 @@ public class ProductQueryService(AppDbContext context) : IProductQueryService
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<List<ProductDto>> GetAllActiveProductsByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
+    public async Task<List<ProductDto>> GetAllActiveProductsAsync(int? categoryId, string? searchTerm, CancellationToken cancellationToken)
     {
-        return await context.Products
+        var products = context.Products
             .AsNoTracking()
-            .Where(p => p.IsActive && !p.IsDeleted && p.ProductCategories.Any(pc => pc.CategoryId == categoryId))
-            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.Image,
+            .Where(p => p.IsActive && !p.IsDeleted);
+        
+        if (categoryId.HasValue)
+            products.Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId));
+
+        if (searchTerm != null)
+            products.Where(p => p.Name.Contains(searchTerm)); // this might be optimization issue to consider
+
+        return await products
+                .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.Image,
                 p.ProductCategories
                 .Where(pc => pc.Category.IsActive && !pc.Category.IsDeleted)
-                .Select(pc => new CategoryDto(pc.CategoryId, pc.Category.Name))
-                .AsEnumerable()
+                .Select(pc => new CategoryDto(pc.CategoryId, pc.Category.Name))       
             ))
             .ToListAsync(cancellationToken);
     }

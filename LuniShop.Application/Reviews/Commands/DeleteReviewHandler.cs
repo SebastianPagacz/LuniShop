@@ -6,19 +6,18 @@ using MediatR;
 
 namespace LuniShop.Application.Reviews.Commands;
 
-public class DeleteReviewHandler(IRepository<Review> repository, IUnitOfWork uow, IProductQueryService queryService) : IRequestHandler<DeleteReviewCommand, Result<string>>
+public class DeleteReviewHandler(IRepository<Product> repository, IUnitOfWork uow) : IRequestHandler<DeleteReviewCommand, Result<string>>
 {
     public async Task<Result<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {
-        if (await queryService.GetActiveProductByIdAsync(request.ProductId, cancellationToken) is null)
+        var existingProduct = await repository.GetByIdAsync(request.ProductId, cancellationToken);
+
+        if (existingProduct is null || existingProduct.IsDeleted || !existingProduct.IsActive)
             return new Result<string>(false, Message: $"Review with Id: {request.ReviewId} was not found.");
 
-        var existingReview = await repository.GetByIdAsync(request.ReviewId, cancellationToken);
+        var existingReview = existingProduct.Reviews.FirstOrDefault(r => r.Id == request.ReviewId);
 
-        if (existingReview.ProductId != request.ProductId)
-            return new Result<string>(false, Message: $"Review with Id: {request.ReviewId} was not found.");
-
-        if (existingReview is null || existingReview.IsDeleted)
+        if (existingReview is null || existingReview.IsDeleted || existingReview.ProductId != request.ProductId)
             return new Result<string>(false, Message: $"Review with Id: {request.ReviewId} was not found.");
 
         existingReview.Delete();

@@ -25,7 +25,6 @@ namespace LuniShop.API
                 options.UseInMemoryDatabase("TestDb"));
 
             builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
-            builder.Services.AddScoped<IRepository<Review>, ReviewRepository>();
             builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -7,28 +7,28 @@ using MediatR;
 
 namespace LuniShop.Application.Reviews.Commands;
 
-public class UpdateReviewHandler(IUnitOfWork uow, IRepository<Review> repository, IProductQueryService queryService) : IRequestHandler<UpdateReviewCommand, Result<ReviewDto>>
+public class UpdateReviewHandler(IUnitOfWork uow, IRepository<Product> repository) : IRequestHandler<UpdateReviewCommand, Result<ReviewDto>>
 {
     public async Task<Result<ReviewDto>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
-        if (await queryService.GetActiveProductByIdAsync(request.ProductId, cancellationToken) is null)
-            return new Result<ReviewDto>(false, Message: $"Review with Id: {request.Id} was not found."); // I do not give information that the product doesn't exist rather that review doesn't exists for particular product
+        var existingProduct = await repository.GetByIdAsync(request.ProductId, cancellationToken);
         
-        var existinReview = await repository.GetByIdAsync(request.Id, cancellationToken);
-
-        if (existinReview.ProductId != request.ProductId)
+        if (existingProduct is null || existingProduct.IsDeleted || !existingProduct.IsActive)
             return new Result<ReviewDto>(false, Message: $"Review with Id: {request.Id} was not found.");
 
-        if (existinReview is null || existinReview.IsDeleted)
+        var existinReview = existingProduct.Reviews.FirstOrDefault(r => r.Id == request.Id);
+
+        if (existinReview is null || existinReview.IsDeleted || existinReview.ProductId != request.ProductId)
             return new Result<ReviewDto>(false, Message : $"Review with Id: {request.Id} was not found.");
 
-        if (!string.IsNullOrEmpty(request.Title))
+        if (!string.IsNullOrWhiteSpace(request.Title))
             existinReview.SetTitle(request.Title);
 
         if(request.Content != null) // can be empty but shouldn't be null
             existinReview.SetContent(request.Content);
 
-        existinReview.SetRating(request.Rating);
+        if(request.Rating.HasValue)
+            existinReview.SetRating((int)request.Rating);
 
         await uow.SaveAsync(cancellationToken);
         
