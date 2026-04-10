@@ -1,7 +1,5 @@
 using LuniShop.API.Middleware;
 using LuniShop.Application;
-using LuniShop.Application.Products.DTO;
-using LuniShop.Application.Reviews.DTO;
 using LuniShop.Application.Services;
 using LuniShop.Domain;
 using LuniShop.Domain.Models;

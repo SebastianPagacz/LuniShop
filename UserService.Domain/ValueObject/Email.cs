@@ -1,4 +1,7 @@
-﻿namespace UserService.Domain.ValueObject;
+﻿using System.ComponentModel.DataAnnotations;
+using UserService.Domain.Exceptions;
+
+namespace UserService.Domain.ValueObject;
 
 public record Email
 {
@@ -7,18 +10,15 @@ public record Email
     private Email() { }
     private Email(string emailString) 
     {
-
+        EmailString = emailString;
     }
 
-    public static Email CreateEmail(string emailString)
+    internal static Email CreateEmail(string emailString)
     {
-        emailString = emailString.Trim(); // Might just use email regex instead of this 
-
-        if (string.IsNullOrEmpty(emailString) || emailString.Length < 5)
-            throw new Exception(); // ToDo: Domain Exception
-
-        if (!emailString.Contains("@") && !emailString.Contains("."))
-            throw new Exception();
+        var emailValidator = new EmailAddressAttribute();
+        
+        if (!emailValidator.IsValid(emailString))
+            throw new DomainException("Provided email address is not valid");
 
         return new Email(emailString);
     }
