@@ -10,8 +10,7 @@ using LuniShop.Infrastructure.Repository;
 using LuniShop.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace LuniShop.API
-{
+namespace LuniShop.API;
     public class Program
     {
         public static void Main(string[] args)
@@ -57,4 +56,3 @@ namespace LuniShop.API
             app.Run();
         }
     }
-}
