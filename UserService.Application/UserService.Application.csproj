@@ -7,18 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context/" />
-    <Folder Include="Repository/" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Services/" />
+    <Folder Include="Users/" />
+    <Folder Include="Users/Command/" />
+    <Folder Include="Users/DTO/" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.25" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.25" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../UserService.Application/UserService.Application.csproj" />
     <ProjectReference Include="../UserService.Domain/UserService.Domain.csproj" />
   </ItemGroup>
 
