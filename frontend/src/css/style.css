@@ -197,3 +197,18 @@ footer a:hover{
     background-color: var(--secondary);
     transition: 300ms;
 }
+
+.contact-form input{
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--accent);
+    height: 2em;
+}
+
+.contact-form textarea{
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--accent);
+    resize: none;
+    height: 5em;
+}

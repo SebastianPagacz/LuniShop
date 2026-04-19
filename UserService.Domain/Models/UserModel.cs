@@ -7,7 +7,7 @@ public class UserModel
 {
     public int Id { get; private set; }
     public Email Email { get; private set; }
-    public string Name { get; private set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
     public bool IsDeleted { get; private set; } = false;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
@@ -16,36 +16,36 @@ public class UserModel
     private List<UserRole> _userRoles = new();
 
     private UserModel() { }
-    private UserModel(Email email, string name, string passwordHash) 
+    private UserModel(Email email, string username, string passwordHash) 
     {
         Email = email;
-        Name = name;
+        Username = username;
         PasswordHash = passwordHash;
 
     }
 
-    public static UserModel Create(string emailString, string name, string passwordHash)
+    public static UserModel Create(string emailString, string Username, string passwordHash)
     {
         if (string.IsNullOrWhiteSpace(emailString))
             throw new DomainException("Email can't be blank");
 
-        if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("Name can't be blank");
+        if (string.IsNullOrWhiteSpace(Username))
+            throw new DomainException("Username can't be blank");
 
         if (string.IsNullOrWhiteSpace(passwordHash))
             throw new DomainException("Password can't be blank");
 
         var validEmail = Email.CreateEmail(emailString);
         
-        return new UserModel(validEmail, name, passwordHash);
+        return new UserModel(validEmail, Username, passwordHash);
     }
 
-    public void SetName(string name)
+    public void SetUsername(string username)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("Username can't be empty.");
+        if (string.IsNullOrWhiteSpace(username))
+            throw new DomainException("UserUsername can't be empty.");
 
-        Name = name;
+        Username = username;
         Update();
     }
 

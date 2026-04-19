@@ -13,7 +13,7 @@ public record Email
         EmailString = emailString;
     }
 
-    internal static Email CreateEmail(string emailString)
+    public static Email CreateEmail(string emailString)
     {
         var emailValidator = new EmailAddressAttribute();
         

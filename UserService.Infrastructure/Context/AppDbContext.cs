@@ -14,7 +14,7 @@ public class AppDbContext : DbContext
             .HasKey(u => u.Id);
         
         modelBuilder.Entity<UserModel>()
-            .Property(u => u.Name)
+            .Property(u => u.Username)
             .IsRequired()
             .HasMaxLength(150);
 
