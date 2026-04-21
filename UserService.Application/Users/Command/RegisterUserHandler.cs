@@ -11,14 +11,16 @@ public class RegisterUserHandler(IUserQueryService queryService, IRepository<Use
 {
     public async Task<Result<string>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var validEmail = Email.CreateEmail(request.EmailString);
-        var existingUser = await queryService.GetUserByDetailsAsync(validEmail, request.Name, cancellationToken); // Need to learn how VO work with ef core
+        if(!Email.IsValidEmail(request.EmailString))
+            return new Result<string>(false, Message: "Invalid email address.");
+
+        var existingUser = await queryService.GetUserByDetailsAsync(request.EmailString, request.Name, cancellationToken); // Need to learn how VO work with ef core
 
         if (existingUser != null)
-            return new Result<string>(false, Message: "User already exisits.");
+            return new Result<string>(false, Message: "Username or email is already in use.");
 
         string paswdHash = passwordHasher.Hash(request.Password);
-        var newUser = UserModel.Create(validEmail.ToString(), request.Name, paswdHash);
+        var newUser = UserModel.Create(request.EmailString, request.Name, paswdHash);
         repository.Add(newUser);
 
         await uow.SaveAsync(cancellationToken);

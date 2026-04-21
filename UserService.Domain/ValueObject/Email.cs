@@ -15,11 +15,18 @@ public record Email
 
     public static Email CreateEmail(string emailString)
     {
-        var emailValidator = new EmailAddressAttribute();
-        
-        if (!emailValidator.IsValid(emailString))
-            throw new DomainException("Provided email address is not valid");
+        if (!IsValidEmail(emailString))
+            throw new DomainException("Provided email address is invalid.");
 
         return new Email(emailString);
+    }
+
+    public static bool IsValidEmail(string emailString)
+    {
+        var emailValidator = new EmailAddressAttribute();
+        if (string.IsNullOrWhiteSpace(emailString) || !emailValidator.IsValid(emailString))
+            return false;
+
+        return true;
     }
 }

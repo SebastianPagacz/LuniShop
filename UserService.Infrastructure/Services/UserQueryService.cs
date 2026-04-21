@@ -8,11 +8,11 @@ namespace UserService.Infrastructure.Services;
 
 public class UserQueryService(AppDbContext context) : IUserQueryService
 {
-    public async Task<UserDto> GetUserByDetailsAsync(Email email, string username, CancellationToken cancellationToken)
+    public async Task<UserDto> GetUserByDetailsAsync(string emailString, string username, CancellationToken cancellationToken)
     {
         return await context.Users
             .AsNoTracking()
-            .Where(u => u.Email == email && u.Username == username)
+            .Where(u => u.Email.EmailString == emailString || u.Username == username)
             .Select(u => new UserDto(u.Id, u.Email, u.Username))
             .FirstOrDefaultAsync(cancellationToken);
     }

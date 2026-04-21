@@ -5,5 +5,5 @@ namespace UserService.Application.Services;
 
 public interface IUserQueryService
 {
-    Task<UserDto> GetUserByDetailsAsync(Email email, string name, CancellationToken cancellationToken);
+    Task<UserDto> GetUserByDetailsAsync(string emailString, string name, CancellationToken cancellationToken);
 }

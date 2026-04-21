@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Models;
+using UserService.Domain.ValueObject;
 
 namespace UserService.Infrastructure.Context;
 
@@ -23,8 +24,14 @@ public class AppDbContext : DbContext
             .IsRequired()
             .HasMaxLength(200);
 
-        modelBuilder.Entity<UserModel>()
-            .OwnsOne(u => u.Email);
+        modelBuilder.Entity<UserModel>(u =>
+        {
+            u.Property(u => u.Email)
+                .HasConversion(e => e.EmailString, emailString => Email.CreateEmail(emailString));
+        });
+
+        //modelBuilder.Entity<UserModel>()
+        //    .OwnsOne(u => u.Email);
         #endregion
 
         #region Role

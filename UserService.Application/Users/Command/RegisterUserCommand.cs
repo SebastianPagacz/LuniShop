@@ -1,5 +1,4 @@
 using MediatR;
-using UserService.Domain.ValueObject;
 
 namespace UserService.Application.Users.Command;
 
