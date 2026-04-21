@@ -24,8 +24,7 @@ public class AppDbContext : DbContext
             .HasMaxLength(200);
 
         modelBuilder.Entity<UserModel>()
-            .Property(u => u.Email)
-            .IsRequired();
+            .OwnsOne(u => u.Email);
         #endregion
 
         #region Role
@@ -36,6 +35,14 @@ public class AppDbContext : DbContext
             .Property(r => r.Name)
             .IsRequired()
             .HasMaxLength(100);
+        #endregion
+        #region UserRole
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => 
+            new {
+                    ur.UserId,
+                    ur.RoleId
+                });
         #endregion
     }
 

@@ -11,6 +11,7 @@ public class UserQueryService(AppDbContext context) : IUserQueryService
     public async Task<UserDto> GetUserByDetailsAsync(Email email, string username, CancellationToken cancellationToken)
     {
         return await context.Users
+            .AsNoTracking()
             .Where(u => u.Email == email && u.Username == username)
             .Select(u => new UserDto(u.Id, u.Email, u.Username))
             .FirstOrDefaultAsync(cancellationToken);
